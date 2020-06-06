@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "turtle-cli-example",
-    "slug": "turtle-cli-example",
+    "name": "turtle-cli-test",
+    "slug": "turtle-cli-test",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -23,11 +23,11 @@
       "**/*"
     ],
     "android": {
-      "package": "com.expo.turtle.cli.example"
+      "package": "com.smnodame.turtle-test"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.turtle.cli.example",
+      "bundleIdentifier": "com.smnodame.turtle-test",
       "buildNumber": "13",
       "config": {
         "usesNonExemptEncryption": false
