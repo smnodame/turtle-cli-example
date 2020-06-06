@@ -23,7 +23,7 @@
       "**/*"
     ],
     "android": {
-      "package": "com.smnodame.turtle-test"
+      "package": "com.smnodame.turtletest"
     },
     "ios": {
       "supportsTablet": true,
