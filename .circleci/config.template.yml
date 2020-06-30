@@ -54,6 +54,12 @@ commands:
           name: Add yarn binaries path to $PATH
           command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
 
+  set_mobile_config_env:
+    steps:
+      - run:
+          name: Set mobile config environment
+          command: ./setEnv.sh
+
   determine_turtle_cache_key_component:
     steps:
       - run:
@@ -164,6 +170,7 @@ jobs:
       - install_turtle_ios
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
@@ -195,6 +202,7 @@ jobs:
       - install_turtle_ios
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
@@ -222,6 +230,7 @@ jobs:
           command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
@@ -252,6 +261,7 @@ jobs:
           command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
