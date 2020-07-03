@@ -163,9 +163,6 @@ jobs:
       - save_turtle_cache
       - set_mobile_config_env
       - run:
-          name: Echo mobile config environment
-          command: echo $EXPO_ENV_FROM
-      - run:
           name: Building Expo standalone app
           command: |
             echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
@@ -198,9 +195,6 @@ jobs:
       - setup_turtle
       - save_turtle_cache
       - set_mobile_config_env
-      - run:
-          name: Echo mobile config environment
-          command: echo $EXPO_ENV_FROM
       - run:
           name: Building Expo standalone app
           command: |
