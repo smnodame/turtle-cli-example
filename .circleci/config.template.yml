@@ -59,7 +59,8 @@ commands:
       - run:
           name: Set mobile config environment
           command: |
-            ./setEnv.sh
+            chmod +x setEnv.sh
+            sh setEnv.sh
 
   determine_turtle_cache_key_component:
     steps:
