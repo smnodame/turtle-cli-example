@@ -1,1 +1,0 @@
-export EXPO_ANDROID_KEYSTORE_ALIAS=xxx
