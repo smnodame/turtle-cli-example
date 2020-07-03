@@ -59,8 +59,8 @@ commands:
       - run:
           name: Set mobile config environment
           command: |
-            echo 'export TEST=x' >> $BASE_ENV
-            source $BASE_ENV
+            echo 'export TEST=x' >> BASE_ENV
+            source BASE_ENV
 
   determine_turtle_cache_key_component:
     steps:
