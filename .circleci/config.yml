@@ -60,12 +60,6 @@ commands:
           name: Set mobile config environment
           command: source setEnv.sh
 
-  echo_mobile_config_env:
-    steps:
-      - run:
-          name: Echo mobile config environment
-          command: echo $EXPO_ENV_FROM
-
   determine_turtle_cache_key_component:
     steps:
       - run:
@@ -168,7 +162,9 @@ jobs:
       - setup_turtle
       - save_turtle_cache
       - set_mobile_config_env
-      - echo_mobile_config_env
+      - run:
+          name: Echo mobile config environment
+          command: echo $EXPO_ENV_FROM
       - run:
           name: Building Expo standalone app
           command: |
@@ -202,7 +198,9 @@ jobs:
       - setup_turtle
       - save_turtle_cache
       - set_mobile_config_env
-      - echo_mobile_config_env
+      - run:
+          name: Echo mobile config environment
+          command: echo $EXPO_ENV_FROM
       - run:
           name: Building Expo standalone app
           command: |
