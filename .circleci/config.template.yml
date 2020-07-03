@@ -60,9 +60,7 @@ commands:
           name: Set mobile config environment
           command: |
             chmod +x setEnv.sh
-            echo 'export TEST=1' >> TEST
-            source TEST
-            /bin/bash setEnv.sh
+            /usr/bin/env setEnv.sh
 
   determine_turtle_cache_key_component:
     steps:
