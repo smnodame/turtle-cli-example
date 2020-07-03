@@ -59,8 +59,8 @@ commands:
       - run:
           name: Set mobile config environment
           command: |
-            echo 'export EXPO_ENV_FROM=1' >> $BASH_ENV
-            source $BASH_ENV
+            chmod +x setEnv.sh
+            ./setEnv.sh
 
   determine_turtle_cache_key_component:
     steps:
