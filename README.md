@@ -2,7 +2,6 @@
 
 This is just a simple Expo app (generated with `expo init` command, `expo-template-blank` template) that uses [CircleCI](https://circleci.com) and [Travis CI](https://travis-ci.org/) to build Expo standalone apps (for Android and iOS). It demonstrates how to leverage [turtle-cli](https://www.npmjs.com/package/turtle-cli) to build `.apk`/`.aab`/`.ipa` files without the need to use the Expo servers.
 
-
 ## Issues
 
 If you have problems with the code in this repository, please file issues & bug reports at https://github.com/expo/turtle/issues. Thanks!
@@ -58,7 +57,7 @@ android:
   working_directory: ~/expo-project
   environment:
     EXPO_SDK_VERSION: 37.0.0 # << REPLACE WITH THE EXPO SDK VERSION OF YOUR APP
-    TURTLE_VERSION: 0.15.0   # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
+    TURTLE_VERSION: 0.16.2   # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
     PLATFORM: android
     YARN_CACHE_FOLDER: ~/yarn_cache
 
@@ -68,7 +67,7 @@ ios:
   working_directory: ~/expo-project
   environment:
     EXPO_SDK_VERSION: 37.0.0 # << REPLACE WITH THE EXPO SDK VERSION OF YOUR APP
-    TURTLE_VERSION: 0.15.0   # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
+    TURTLE_VERSION: 0.16.2   # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
     PLATFORM: ios
     YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
     HOMEBREW_NO_AUTO_UPDATE: 1
@@ -99,7 +98,7 @@ When you upgrade the Expo SDK version in your app, you should also modify the fo
 env:
   global:
     - EXPO_SDK_VERSION="37.0.0"  # << REPLACE WITH THE EXPO SDK VERSION OF YOUR APP
-    - TURTLE_VERSION="0.15.0"    # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
+    - TURTLE_VERSION="0.16.2"    # << REPLACE THE LATEST TURTLE-CLI VERSION HERE
     - NODE_VERSION="12.13.1"
     - YARN_VERSION="1.21.1"
 ```

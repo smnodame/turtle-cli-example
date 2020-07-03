@@ -24,7 +24,7 @@ executors:
     working_directory: ~/expo-project
     environment:
       EXPO_SDK_VERSION: 37.0.0
-      TURTLE_VERSION: 0.15.0
+      TURTLE_VERSION: 0.16.2
       PLATFORM: android
       YARN_CACHE_FOLDER: ~/yarn_cache
 
@@ -34,7 +34,7 @@ executors:
     working_directory: ~/expo-project
     environment:
       EXPO_SDK_VERSION: 37.0.0
-      TURTLE_VERSION: 0.15.0
+      TURTLE_VERSION: 0.16.2
       PLATFORM: ios
       YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
       HOMEBREW_NO_AUTO_UPDATE: 1
@@ -53,6 +53,12 @@ commands:
       - run:
           name: Add yarn binaries path to $PATH
           command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
+
+  set_mobile_config_env:
+    steps:
+      - run:
+          name: Set mobile config environment
+          command: source setEnv.sh
 
   determine_turtle_cache_key_component:
     steps:
@@ -111,20 +117,11 @@ workflows:
   version: 2
   builds:
     jobs:
-      - publish_app:
-          filters:
-            branches:
-              only: master
-      - build_ios_simulator:
-          requires:
-            - publish_app
+      - publish_app
       - build_ios_archive:
           requires:
             - publish_app
       - build_android_apk:
-          requires:
-            - publish_app
-      - build_android_aab:
           requires:
             - publish_app
 
@@ -164,6 +161,7 @@ jobs:
       - install_turtle_ios
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
@@ -178,32 +176,6 @@ jobs:
               -o ~/expo-project.ipa
       - store_artifacts:
           path: ~/expo-project.ipa
-
-  build_ios_simulator:
-    executor: ios
-    steps:
-      - checkout
-      - restore_yarn_cache:
-          platform: darwin
-      - run: yarn
-      - save_yarn_cache:
-          platform: darwin
-      - install_macos_deps
-      - add_yarn_binaries_to_path
-      - determine_turtle_cache_key_component
-      - restore_turtle_cache
-      - install_turtle_ios
-      - setup_turtle
-      - save_turtle_cache
-      - run:
-          name: Building Expo standalone app
-          command: |
-            turtle build:ios \
-              --team-id $EXPO_APPLE_TEAM_ID \
-              --type simulator \
-              -o ~/expo-project.tar.gz
-      - store_artifacts:
-          path: ~/expo-project.tar.gz
 
   build_android_apk:
     executor: android
@@ -222,6 +194,7 @@ jobs:
           command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       - setup_turtle
       - save_turtle_cache
+      - set_mobile_config_env
       - run:
           name: Building Expo standalone app
           command: |
@@ -234,33 +207,3 @@ jobs:
               -o ~/expo-project.apk
       - store_artifacts:
           path: ~/expo-project.apk
-
-  build_android_aab:
-    executor: android
-    steps:
-      - checkout
-      - restore_yarn_cache:
-          platform: linux
-      - run: yarn
-      - save_yarn_cache:
-          platform: linux
-      - add_yarn_binaries_to_path
-      - determine_turtle_cache_key_component
-      - restore_turtle_cache
-      - run:
-          name: Installing gulp-cli & turtle-cli
-          command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-      - setup_turtle
-      - save_turtle_cache
-      - run:
-          name: Building Expo standalone app
-          command: |
-            echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
-            base64 --decode expo-project.jks.base64 > expo-project.jks
-            turtle build:android \
-              --keystore-path ./expo-project.jks \
-              --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
-              --type app-bundle \
-              -o ~/expo-project.aab
-      - store_artifacts:
-          path: ~/expo-project.aab
