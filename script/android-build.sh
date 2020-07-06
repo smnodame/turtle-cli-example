@@ -3,7 +3,7 @@
 trap 'catch' ERR
 
 catch() {
-    curl -H "Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"FAILED\"}" $SET_BUILD_STATUS_URL
+    curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"FAILED\"}" $SET_BUILD_STATUS_URL
 }
 
 echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
