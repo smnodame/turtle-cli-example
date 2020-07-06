@@ -3,7 +3,7 @@
 trap 'catch' ERR
 
 catch() {
-    curl -H "Authorization: token" --data "param1=failed" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+    curl -H "Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"FAILED\"}" $SET_BUILD_STATUS_URL
 }
 
 echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
