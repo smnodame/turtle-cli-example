@@ -128,15 +128,15 @@ jobs:
     steps:
       - checkout
       - add_yarn_binaries_to_path
-      - set_mobile_config_env
-      - run:
-          name: Set processing
-          command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"PROCESSING\"}" $SET_BUILD_STATUS_URL'
       - restore_yarn_cache:
           platform: linux
       - run:
           name: Installing expo-cli
           command: yarn global add expo-cli
+      - set_mobile_config_env
+      - run:
+          name: Set processing
+          command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"PROCESSING\"}" $SET_BUILD_STATUS_URL'
       - run:
           name: Publishing Expo app
           command: |
