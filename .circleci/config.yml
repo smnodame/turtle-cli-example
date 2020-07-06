@@ -126,12 +126,12 @@ jobs:
   publish_app:
     executor: js
     steps:
+      - checkout
+      - add_yarn_binaries_to_path
       - set_mobile_config_env
       - run:
           name: Set processing
           command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"PROCESSING\"}" $SET_BUILD_STATUS_URL'
-      - checkout
-      - add_yarn_binaries_to_path
       - restore_yarn_cache:
           platform: linux
       - run:
