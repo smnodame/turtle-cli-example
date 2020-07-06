@@ -147,7 +147,7 @@ jobs:
     steps:
       - run:
           name: Set completed build
-          command: curl --data "param1=$EXPO_ENV_FROM" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: curl --data "param1=completed" $MOBILD_BUILD_URL
 
   build_ios_archive:
     executor: ios
@@ -170,7 +170,10 @@ jobs:
           name: Building Expo standalone app
           command: ./script/ios-build.sh
       - store_artifacts:
-          path: ~/expo-project.ipa
+					path: ~/expo-project.ipa
+			- run:
+					name: Upload ipa
+					command: curl -F "file=@~/expo-project.ipa" $MOBILD_BUILD_URL
 
   build_android_apk:
     executor: android
@@ -195,3 +198,6 @@ jobs:
           command: ./script/android-build.sh
       - store_artifacts:
           path: ~/expo-project.apk
+      - run:
+					name: Upload apk
+					command: curl -F "file=@~/expo-project.apk" $MOBILD_BUILD_URL
