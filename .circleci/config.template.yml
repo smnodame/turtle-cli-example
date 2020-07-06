@@ -9,18 +9,9 @@ executors:
       YARN_CACHE_FOLDER: ~/yarn_cache
 
   android:
-    # WARNING: medium (default) seems not to be enough for Turtle
-    # To use larger resource classes you need to open a ticket and request it from CircleCI
-    # More Information Here - https://circleci.com/docs/2.0/configuration-reference/#resource_class
     resource_class: xlarge
     docker:
-      # https://github.com/expo/expo-turtle-android
       - image: dsokal/expo-turtle-android
-    # NOTE: If you have macos machines you can use them instead.
-    # Comment out 'resource_class', 'docker' and 'image' and replace
-    # with the comments below.
-    #  macos:
-    #    xcode: 10.1.0
     working_directory: ~/expo-project
     environment:
       EXPO_SDK_VERSION: ${APP_EXPO_SDK_VERSION}
@@ -126,6 +117,10 @@ workflows:
       - build_android_apk:
           requires:
             - publish_app
+      - set_completed:
+          requires:
+            - build_ios_archive
+            - build_android_apk
 
 jobs:
   publish_app:
@@ -147,6 +142,13 @@ jobs:
       - save_yarn_cache:
           platform: linux
 
+  set_completed:
+    executor: js
+    steps:
+      - run:
+          name: Set completed build
+          command: curl --data "param1=$EXPO_ENV_FROM" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+
   build_ios_archive:
     executor: ios
     steps:
@@ -166,16 +168,7 @@ jobs:
       - set_mobile_config_env
       - run:
           name: Building Expo standalone app
-          command: |
-            echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
-            base64 --decode expo-project_dist.p12.base64 > expo-project_dist.p12
-            echo $EXPO_IOS_PROVISIONING_PROFILE_BASE64 > expo-project.mobileprovision.base64
-            base64 --decode expo-project.mobileprovision.base64 > expo-project.mobileprovision
-            turtle build:ios \
-              --team-id $EXPO_APPLE_TEAM_ID \
-              --dist-p12-path ./expo-project_dist.p12 \
-              --provisioning-profile-path ./expo-project.mobileprovision \
-              -o ~/expo-project.ipa
+          command: ./script/ios-build.sh
       - store_artifacts:
           path: ~/expo-project.ipa
 
@@ -198,17 +191,7 @@ jobs:
       - save_turtle_cache
       - set_mobile_config_env
       - run:
-          name: Test env
-          command: curl --data "param1=$EXPO_ENV_FROM" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
-      - run:
           name: Building Expo standalone app
-          command: |
-            echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
-            base64 --decode expo-project.jks.base64 > expo-project.jks
-            turtle build:android \
-              --keystore-path ./expo-project.jks \
-              --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
-              --type apk \
-              -o ~/expo-project.apk
+          command: ./script/android-build.sh
       - store_artifacts:
           path: ~/expo-project.apk
