@@ -128,7 +128,7 @@ jobs:
     steps:
       - run:
           name: Set processing
-          command: curl -H "Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\"}" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: 'curl -H "Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\"}" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16'
       - checkout
       - add_yarn_binaries_to_path
       - restore_yarn_cache:
@@ -150,7 +150,7 @@ jobs:
     steps:
       - run:
           name: Set completed build
-          command: curl -H "Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\"}" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
+          command: 'curl -H Content-Type: application/json, Authorization: $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\"}" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16'
 
   build_ios_archive:
     executor: ios
