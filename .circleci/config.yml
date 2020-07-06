@@ -126,6 +126,9 @@ jobs:
   publish_app:
     executor: js
     steps:
+      - run:
+          name: Set processing
+          command: curl --data "param1=processing" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
       - checkout
       - add_yarn_binaries_to_path
       - restore_yarn_cache:
