@@ -203,4 +203,4 @@ jobs:
           path: ~/expo-project.apk
       - run:
           name: Upload apk
-          command: 'curl -H -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.apk" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
+          command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.apk" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
