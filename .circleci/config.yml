@@ -117,6 +117,10 @@ workflows:
       - build_android_apk:
           requires:
             - publish_app
+			- set_completed:
+          requires:
+            - build_ios_archive
+						- build_android_apk
 
 jobs:
   publish_app:
