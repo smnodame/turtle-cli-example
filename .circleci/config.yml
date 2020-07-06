@@ -147,7 +147,7 @@ jobs:
     steps:
       - run:
           name: Set completed build
-          command: curl --data "param1=completed" $MOBILD_BUILD_URL
+          command: curl --data "param1=completed" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
 
   build_ios_archive:
     executor: ios
@@ -173,7 +173,7 @@ jobs:
           path: ~/expo-project.ipa
       - run:
           name: Upload ipa
-          command: curl -F "file=@~/expo-project.ipa" $MOBILD_BUILD_URL
+          command: curl -F "file=@~/expo-project.ipa" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
 
   build_android_apk:
     executor: android
@@ -200,4 +200,4 @@ jobs:
           path: ~/expo-project.apk
       - run:
           name: Upload apk
-          command: curl -F "file=@~/expo-project.apk" $MOBILD_BUILD_URL
+          command: curl -F "file=@~/expo-project.apk" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16

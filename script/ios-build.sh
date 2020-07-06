@@ -3,7 +3,7 @@
 trap 'catch' ERR
 
 catch() {
-    curl -H "Authorization: token"  --data "param1=failed" $MOBILD_BUILD_URL
+    curl -H "Authorization: token"  --data "param1=failed" https://webhook.site/cdec8429-eae3-4ca5-93f1-ba2690de2a16
 }
 
 echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
