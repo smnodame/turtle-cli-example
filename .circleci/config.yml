@@ -142,8 +142,8 @@ jobs:
     executor: js
     steps:
       - run:
-					name: Set completed build
-					command: curl --data "param1=completed" $MOBILD_BUILD_URL
+          name: Set completed build
+          command: curl --data "param1=completed" $MOBILD_BUILD_URL
 
   build_ios_archive:
     executor: ios
