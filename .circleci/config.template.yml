@@ -146,8 +146,8 @@ jobs:
     executor: js
     steps:
       - run:
-          name: Set completed build
-          command: curl --data "param1=completed" $MOBILD_BUILD_URL
+        name: Set completed build
+        command: curl --data "param1=completed" $MOBILD_BUILD_URL
 
   build_ios_archive:
     executor: ios
@@ -171,9 +171,9 @@ jobs:
           command: ./script/ios-build.sh
       - store_artifacts:
 					path: ~/expo-project.ipa
-			- run:
-					name: Upload ipa
-					command: curl -F "file=@~/expo-project.ipa" $MOBILD_BUILD_URL
+      - run:
+          name: Upload ipa
+          command: curl -F "file=@~/expo-project.ipa" $MOBILD_BUILD_URL
 
   build_android_apk:
     executor: android
@@ -199,5 +199,5 @@ jobs:
       - store_artifacts:
           path: ~/expo-project.apk
       - run:
-					name: Upload apk
-					command: curl -F "file=@~/expo-project.apk" $MOBILD_BUILD_URL
+          name: Upload apk
+          command: curl -F "file=@~/expo-project.apk" $MOBILD_BUILD_URL
