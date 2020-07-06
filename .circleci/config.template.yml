@@ -126,6 +126,7 @@ jobs:
   publish_app:
     executor: js
     steps:
+      - set_mobile_config_env
       - run:
           name: Set processing
           command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"PROCESSING\"}" $SET_BUILD_STATUS_URL'
