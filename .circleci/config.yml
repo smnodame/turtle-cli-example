@@ -135,8 +135,8 @@ jobs:
           command: yarn global add expo-cli
       - set_mobile_config_env
       - run:
-          name: Set processing
-          command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"PROCESSING\"}" $SET_BUILD_STATUS_URL'
+          name: Set bulding
+          command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"BUILDING\"}" $SET_BUILD_STATUS_URL'
       - run:
           name: Publishing Expo app
           command: |
