@@ -14,31 +14,12 @@ executors:
             - image: dsokal/expo-turtle-android
         working_directory: ~/expo-project
         environment:
-            EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.16.2
+            EXPO_SDK_VERSION: ${APP_EXPO_SDK_VERSION}
+            TURTLE_VERSION: ${TURTLE_VERSION_NEW}
             PLATFORM: android
             YARN_CACHE_FOLDER: ~/yarn_cache
 
-    ios:
-        macos:
-            xcode: 11.1.0
-        working_directory: ~/expo-project
-        environment:
-            EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.16.2
-            PLATFORM: ios
-            YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
-            HOMEBREW_NO_AUTO_UPDATE: 1
-
 commands:
-    install_macos_deps:
-        steps:
-            - run:
-                  name: Installing jq & node@12
-                  command: |
-                      brew install jq node@12
-                      brew link --overwrite --force node@12
-
     add_yarn_binaries_to_path:
         steps:
             - run:
@@ -73,14 +54,6 @@ commands:
                       - ~/yarn_cache
                   key: cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
 
-    install_turtle_ios:
-        steps:
-            - run:
-                  name: Installing turtle-cli
-                  command: |
-                      yarn config set prefix ~/.yarn
-                      yarn global add turtle-cli@$TURTLE_VERSION
-
     setup_turtle:
         steps:
             - run:
@@ -111,15 +84,11 @@ workflows:
     builds:
         jobs:
             - publish_app
-            - build_ios_archive:
-                  requires:
-                      - publish_app
             - build_android_apk:
                   requires:
                       - publish_app
             - set_completed:
                   requires:
-                      - build_ios_archive
                       - build_android_apk
 
 jobs:
@@ -153,32 +122,6 @@ jobs:
                   name: Set completed build
                   command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"COMPLETED\"}" $SET_BUILD_STATUS_URL'
 
-    build_ios_archive:
-        executor: ios
-        steps:
-            - checkout
-            - restore_yarn_cache:
-                  platform: darwin
-            - run: yarn
-            - save_yarn_cache:
-                  platform: darwin
-            - install_macos_deps
-            - add_yarn_binaries_to_path
-            - determine_turtle_cache_key_component
-            - restore_turtle_cache
-            - install_turtle_ios
-            - setup_turtle
-            - save_turtle_cache
-            - set_mobile_config_env
-            - run:
-                  name: Building Expo standalone app
-                  command: ./script/ios-build.sh
-            - store_artifacts:
-                  path: ~/expo-project.ipa
-            - run:
-                  name: Upload ipa
-                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.ipa" -F "build_id=$BUILD_ID" $SET_ANDROID_LINK_URL'
-
     build_android_apk:
         executor: android
         steps:
@@ -204,4 +147,4 @@ jobs:
                   path: ~/expo-project.apk
             - run:
                   name: Upload apk
-                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.apk" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
+                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.apk" -F "build_id=$BUILD_ID" $SET_ANDROID_LINK_URL'

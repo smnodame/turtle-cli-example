@@ -8,24 +8,13 @@ executors:
         environment:
             YARN_CACHE_FOLDER: ~/yarn_cache
 
-    android:
-        resource_class: xlarge
-        docker:
-            - image: dsokal/expo-turtle-android
-        working_directory: ~/expo-project
-        environment:
-            EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.16.2
-            PLATFORM: android
-            YARN_CACHE_FOLDER: ~/yarn_cache
-
     ios:
         macos:
             xcode: 11.1.0
         working_directory: ~/expo-project
         environment:
-            EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.16.2
+            EXPO_SDK_VERSION: ${APP_EXPO_SDK_VERSION}
+            TURTLE_VERSION: ${TURTLE_VERSION_NEW}
             PLATFORM: ios
             YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
             HOMEBREW_NO_AUTO_UPDATE: 1
@@ -114,13 +103,9 @@ workflows:
             - build_ios_archive:
                   requires:
                       - publish_app
-            - build_android_apk:
-                  requires:
-                      - publish_app
             - set_completed:
                   requires:
                       - build_ios_archive
-                      - build_android_apk
 
 jobs:
     publish_app:
@@ -177,31 +162,4 @@ jobs:
                   path: ~/expo-project.ipa
             - run:
                   name: Upload ipa
-                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.ipa" -F "build_id=$BUILD_ID" $SET_ANDROID_LINK_URL'
-
-    build_android_apk:
-        executor: android
-        steps:
-            - checkout
-            - restore_yarn_cache:
-                  platform: linux
-            - run: yarn
-            - save_yarn_cache:
-                  platform: linux
-            - add_yarn_binaries_to_path
-            - determine_turtle_cache_key_component
-            - restore_turtle_cache
-            - run:
-                  name: Installing gulp-cli & turtle-cli
-                  command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-            - setup_turtle
-            - save_turtle_cache
-            - set_mobile_config_env
-            - run:
-                  name: Building Expo standalone app
-                  command: ./script/android-build.sh
-            - store_artifacts:
-                  path: ~/expo-project.apk
-            - run:
-                  name: Upload apk
-                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.apk" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
+                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.ipa" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
