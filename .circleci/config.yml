@@ -8,23 +8,39 @@ executors:
         environment:
             YARN_CACHE_FOLDER: ~/yarn_cache
 
-    android:
-        resource_class: xlarge
-        docker:
-            - image: dsokal/expo-turtle-android
+    ios:
+        macos:
+            xcode: 11.1.0
         working_directory: ~/expo-project
         environment:
             EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.20.5
-            PLATFORM: android
-            YARN_CACHE_FOLDER: ~/yarn_cache
+            TURTLE_VERSION: 0.17.2
+            PLATFORM: ios
+            YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
+            HOMEBREW_NO_AUTO_UPDATE: 1
 
 commands:
+    install_macos_deps:
+        steps:
+            - run:
+                  name: Installing jq & node@12
+                  command: |
+                      brew install jq node@12
+                      brew link --overwrite --force node@12
+
     add_yarn_binaries_to_path:
         steps:
             - run:
                   name: Add yarn binaries path to $PATH
                   command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
+
+    set_mobile_config_env:
+        steps:
+            - run:
+                  name: Set mobile config environment
+                  command: |
+                      chmod +x setEnv.sh
+                      ./setEnv.sh
 
     determine_turtle_cache_key_component:
         steps:
@@ -45,6 +61,14 @@ commands:
                       - ~/.turtle
                       - ~/yarn_cache
                   key: cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
+
+    install_turtle_ios:
+        steps:
+            - run:
+                  name: Installing turtle-cli
+                  command: |
+                      yarn config set prefix ~/.yarn
+                      yarn global add turtle-cli@$TURTLE_VERSION
 
     setup_turtle:
         steps:
@@ -76,12 +100,12 @@ workflows:
     builds:
         jobs:
             - publish_app
-            - build_android_apk:
+            - build_ios_archive:
                   requires:
                       - publish_app
             - set_completed:
                   requires:
-                      - build_android_apk
+                      - build_ios_archive
 
 jobs:
     publish_app:
@@ -94,12 +118,10 @@ jobs:
             - run:
                   name: Installing expo-cli
                   command: yarn global add expo-cli
-            - run:
-                  name: Installing cmd packages
-                  command: 'cd ./commands && yarn'
+            - set_mobile_config_env
             - run:
                   name: Set bulding
-                  command: 'node ./commands/updateStatus.js BUILDING'
+                  command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"BUILDING\"}" $SET_BUILD_STATUS_URL'
             - run:
                   name: Publishing Expo app
                   command: |
@@ -114,30 +136,30 @@ jobs:
         steps:
             - run:
                   name: Set completed build
-                  command: 'node ./commands/updateStatus.js COMPLETED'
+                  command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"COMPLETED\"}" $SET_BUILD_STATUS_URL'
 
-    build_android_apk:
-        executor: android
+    build_ios_archive:
+        executor: ios
         steps:
             - checkout
             - restore_yarn_cache:
-                  platform: linux
+                  platform: darwin
             - run: yarn
             - save_yarn_cache:
-                  platform: linux
+                  platform: darwin
+            - install_macos_deps
             - add_yarn_binaries_to_path
             - determine_turtle_cache_key_component
             - restore_turtle_cache
-            - run:
-                  name: Installing gulp-cli & turtle-cli
-                  command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+            - install_turtle_ios
             - setup_turtle
             - save_turtle_cache
+            - set_mobile_config_env
             - run:
                   name: Building Expo standalone app
-                  command: ./script/android-build.sh
+                  command: ./script/ios-build.sh
             - store_artifacts:
-                  path: ~/expo-project.apk
+                  path: ~/expo-project.ipa
             - run:
-                  name: Upload apk
-                  command: 'node ./commands/uploadFile.js android ~/expo-project.apk'
+                  name: Upload ipa
+                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.ipa" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
