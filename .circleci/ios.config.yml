@@ -14,7 +14,7 @@ executors:
         working_directory: ~/expo-project
         environment:
             EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.17.2
+            TURTLE_VERSION: 0.20.5
             PLATFORM: ios
             YARN_CACHE_FOLDER: /Users/distiller/yarn_cache
             HOMEBREW_NO_AUTO_UPDATE: 1
@@ -33,14 +33,6 @@ commands:
             - run:
                   name: Add yarn binaries path to $PATH
                   command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
-
-    set_mobile_config_env:
-        steps:
-            - run:
-                  name: Set mobile config environment
-                  command: |
-                      chmod +x setEnv.sh
-                      ./setEnv.sh
 
     determine_turtle_cache_key_component:
         steps:
@@ -118,10 +110,12 @@ jobs:
             - run:
                   name: Installing expo-cli
                   command: yarn global add expo-cli
-            - set_mobile_config_env
+            - run:
+                  name: Installing cmd packages
+                  command: 'cd ./commands && yarn'
             - run:
                   name: Set bulding
-                  command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"BUILDING\"}" $SET_BUILD_STATUS_URL'
+                  command: 'node ./commands/updateStatus.js BUILDING'
             - run:
                   name: Publishing Expo app
                   command: |
@@ -136,7 +130,7 @@ jobs:
         steps:
             - run:
                   name: Set completed build
-                  command: 'curl -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --request POST --data "{\"build_id\":\"$BUILD_ID\", \"status\":\"COMPLETED\"}" $SET_BUILD_STATUS_URL'
+                  command: 'node ./commands/updateStatus.js COMPLETED'
 
     build_ios_archive:
         executor: ios
@@ -154,7 +148,6 @@ jobs:
             - install_turtle_ios
             - setup_turtle
             - save_turtle_cache
-            - set_mobile_config_env
             - run:
                   name: Building Expo standalone app
                   command: ./script/ios-build.sh
@@ -162,4 +155,4 @@ jobs:
                   path: ~/expo-project.ipa
             - run:
                   name: Upload ipa
-                  command: 'curl -H "Authorization: Bearer $TOKEN" --request POST -F "file=@~/expo-project.ipa" -F "build_id=$BUILD_ID" $SET_IOS_LINK_URL'
+                  command: 'node ./commands/uploadFile.js ios ~/expo-project.ipa'
