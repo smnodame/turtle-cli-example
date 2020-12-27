@@ -135,7 +135,7 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Building Expo standalone app
-                  command: 'node androidBuild.js'
+                  command: 'node ./commands/androidBuild.js'
             - store_artifacts:
                   path: ~/expo-project.apk
             - run:
