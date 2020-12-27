@@ -150,7 +150,7 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Building Expo standalone app
-                  command: 'node iosBuild.js'
+                  command: 'node ./commands/iosBuild.js'
             - store_artifacts:
                   path: ~/expo-project.ipa
             - run:
