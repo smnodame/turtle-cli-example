@@ -11,7 +11,7 @@ const writeFile = util.promisify(fs.writeFile)
 async function androidBuild() {
     try {
         const apkFilePath = '~/expo-project.apk'
-        const jksFilePath = '~/expo-project.jks'
+        const jksFilePath = './expo-project.jks'
 
         await us.updateStatus('BUILDING')
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })

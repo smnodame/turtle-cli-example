@@ -10,8 +10,8 @@ const writeFile = util.promisify(fs.writeFile)
 async function iosBuild() {
     try {
         const ipaFilePath = '~/expo-project.ipa'
-        const p12FilePath = '~/expo-project_dist.p12'
-        const mobileprovisionFilePath = '~/expo-project.mobileprovision'
+        const p12FilePath = './/expo-project_dist.p12'
+        const mobileprovisionFilePath = './expo-project.mobileprovision'
 
         await us.updateStatus('BUILDING')
         await writeFile(p12FilePath, config.EXPO_IOS_DIST_P12_BASE64, { encoding: 'base64' })
