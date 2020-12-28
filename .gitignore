@@ -16,5 +16,3 @@ npm-debug.*
 turtle-cli-example_dist.password
 turtle-cli-example_apns_key.id
 android-upload-service-account.json
-
-commands/node_modules
