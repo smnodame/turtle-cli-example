@@ -115,7 +115,7 @@ jobs:
                   command: 'cd ./commands && yarn'
             - run:
                   name: Set bulding
-                  command: 'node ./commands/updateStatus.js BUILDING'
+                  command: 'cd ./commands && node ./updateStatus.js BUILDING'
             - run:
                   name: Publishing Expo app
                   command: |
@@ -130,7 +130,7 @@ jobs:
         steps:
             - run:
                   name: Set completed build
-                  command: 'node ./commands/updateStatus.js COMPLETED'
+                  command: 'cd ./commands && node ./updateStatus.js COMPLETED'
 
     build_ios_archive:
         executor: ios
@@ -150,9 +150,9 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Building Expo standalone app
-                  command: 'node ./commands/iosBuild.js'
+                  command: 'cd ./commands && node ./iosBuild.js'
             - store_artifacts:
                   path: ~/expo-project.ipa
             - run:
                   name: Upload ipa
-                  command: 'node ./commands/uploadFile.js ios ~/expo-project.ipa'
+                  command: 'cd ./commands && node ./uploadFile.js ios ~/expo-project.ipa'
