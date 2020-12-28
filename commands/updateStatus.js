@@ -1,7 +1,7 @@
 const axios = require('axios')
 const config = require('../config.json')
 
-module.exports = function updateStatus(status) {
+function updateStatus(status) {
     return axios.post(process.env.SET_BUILD_STATUS_URL, {
         build_id: config.BUILD_ID,
         status: status
@@ -16,6 +16,10 @@ module.exports = function updateStatus(status) {
     .catch(function (error) {
         console.log(error)
     })
+}
+
+module.exports = {
+    updateStatus
 }
 
 if (require.main === module) {

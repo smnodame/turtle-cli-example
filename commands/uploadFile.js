@@ -2,7 +2,7 @@ const axios = require('axios')
 const config = require('../config.json')
 const fs = require('fs')
 
-module.exports = function uploadFile(platform, path) {
+function uploadFile(platform, path) {
     const uploadUrl = platform === 'ios' ? process.env.SET_IOS_LINK_URL : process.env.SET_ANDROID_LINK_URL
 
     const newFile = fs.createReadStream(path)
@@ -27,6 +27,10 @@ module.exports = function uploadFile(platform, path) {
         .catch(function (error) {
             console.log(error)
         })
+}
+
+module.exports = {
+    uploadFile
 }
 
 if (require.main === module) {
