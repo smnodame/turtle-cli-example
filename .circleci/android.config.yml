@@ -96,10 +96,10 @@ jobs:
                   command: yarn global add expo-cli
             - run:
                   name: Installing cmd packages
-                  command: 'cd ./commands && yarn'
+                  command: 'cd ~/expo-project/commands && yarn'
             - run:
                   name: Set bulding
-                  command: 'cd ./commands && node ./updateStatus.js BUILDING'
+                  command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
             - run:
                   name: Publishing Expo app
                   command: |
@@ -114,7 +114,7 @@ jobs:
         steps:
             - run:
                   name: Set completed build
-                  command: 'cd ./commands && node ./updateStatus.js COMPLETED'
+                  command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
 
     build_android_apk:
         executor: android
@@ -135,9 +135,9 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Building Expo standalone app
-                  command: 'cd ./commands && node ./androidBuild.js'
+                  command: 'cd ~/expo-project/commands && node ./androidBuild.js'
             - store_artifacts:
                   path: ~/expo-project.apk
             - run:
                   name: Upload apk
-                  command: 'cd ./commands && node ./uploadFile.js android ~/expo-project.apk'
+                  command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
