@@ -1,6 +1,8 @@
 const axios = require('axios')
 const config = require('../config.json')
 const fs = require('fs')
+const FormData = require('form-data')
+const us = require('./updateStatus')
 
 function uploadFile(platform, path) {
     const uploadUrl = platform === 'ios' ? process.env.SET_IOS_LINK_URL : process.env.SET_ANDROID_LINK_URL
@@ -25,7 +27,7 @@ function uploadFile(platform, path) {
             console.log(response)
         })
         .catch(function (error) {
-            console.log(error)
+            await us.updateStatus('FAILED')
         })
 }
 
