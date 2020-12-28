@@ -1,10 +1,11 @@
 const axios = require('axios')
 const config = require('../config.json')
 
-function updateStatus(status) {
+function updateStatus(status, reason='') {
     return axios.post(`${process.env.INVENTORY_ENDPOINT}${process.env.SET_BUILD_STATUS_URL}`, {
         build_id: config.BUILD_ID,
-        status: status
+        status: status,
+        reason: reason
     }, {
         headers: {
           'Authorization': `Bearer ${config.TOKEN}` 
