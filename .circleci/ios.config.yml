@@ -112,10 +112,10 @@ jobs:
                   command: yarn global add expo-cli
             - run:
                   name: Installing cmd packages
-                  command: 'cd ./commands && yarn'
+                  command: 'cd ~/expo-project/commands && yarn'
             - run:
                   name: Set bulding
-                  command: 'cd ./commands && node ./updateStatus.js BUILDING'
+                  command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
             - run:
                   name: Publishing Expo app
                   command: |
@@ -130,7 +130,7 @@ jobs:
         steps:
             - run:
                   name: Set completed build
-                  command: 'cd ./commands && node ./updateStatus.js COMPLETED'
+                  command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
 
     build_ios_archive:
         executor: ios
@@ -150,9 +150,9 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Building Expo standalone app
-                  command: 'cd ./commands && node ./iosBuild.js'
+                  command: 'cd ~/expo-project/commands && node ./iosBuild.js'
             - store_artifacts:
                   path: ~/expo-project.ipa
             - run:
                   name: Upload ipa
-                  command: 'cd ./commands && node ./uploadFile.js ios ~/expo-project.ipa'
+                  command: 'cd ~/expo-project/commands && node ./uploadFile.js ios ~/expo-project.ipa'
