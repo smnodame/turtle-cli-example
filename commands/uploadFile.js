@@ -27,7 +27,7 @@ function uploadFile(platform, path) {
             console.log(response)
         })
         .catch(function (error) {
-            await us.updateStatus('FAILED')
+            us.updateStatus('FAILED')
         })
 }
 
