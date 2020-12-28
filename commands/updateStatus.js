@@ -2,7 +2,7 @@ const axios = require('axios')
 const config = require('../config.json')
 
 function updateStatus(status) {
-    return axios.post(process.env.SET_BUILD_STATUS_URL, {
+    return axios.post(`${process.env.INVENTORY_ENDPOINT}${process.env.SET_BUILD_STATUS_URL}`, {
         build_id: config.BUILD_ID,
         status: status
     }, {

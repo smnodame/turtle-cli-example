@@ -12,7 +12,7 @@ function uploadFile(platform, path) {
 
     const request = {
         method: 'post',
-        url: uploadUrl,
+        url: `${process.env.INVENTORY_ENDPOINT}${uploadUrl}`,
         headers: {
           'Authorization': `Bearer ${config.TOKEN}`,
           'Content-Type': 'multipart/form-data'
