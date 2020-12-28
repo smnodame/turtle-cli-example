@@ -23,5 +23,7 @@ async function androidBuild() {
 }
 
 if (require.main === module) {
-    androidBuild()
+    androidBuild().catch(() => {
+        process.exit(1)
+    })
 } 

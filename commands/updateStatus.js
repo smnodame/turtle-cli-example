@@ -26,7 +26,9 @@ module.exports = {
 if (require.main === module) {
     const args = process.argv.slice(2)
     if (args.length > 0) {
-        updateStatus(args[0])
+        updateStatus(args[0]).catch(() => {
+            process.exit(1)
+        })
     } else {
         console.log('Status arg is not defined')
     }
