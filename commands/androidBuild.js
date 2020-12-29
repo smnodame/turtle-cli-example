@@ -31,7 +31,9 @@ async function androidBuild() {
 }
 
 if (require.main === module) {
-    androidBuild().catch(() => {
+    androidBuild().catch((err) => {
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxxx')
+        console.log(err)
         process.exit(1)
     })
 } 
