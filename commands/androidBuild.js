@@ -26,14 +26,12 @@ async function androidBuild() {
         console.info(stdout)
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
-        throw err
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxxx')
+        console.log(err)
+        process.exit(1)
     }
 }
 
 if (require.main === module) {
-    androidBuild().catch((err) => {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxx')
-        console.log(err)
-        process.exit(1)
-    })
-} 
+    androidBuild()
+}
