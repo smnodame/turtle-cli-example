@@ -15,7 +15,15 @@ async function androidBuild() {
 
         await us.updateStatus('BUILDING')
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
-        await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`)
+        const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`)
+        if (stderr) {
+            console.error('turtle build error')
+            console.error(stderr)
+            await us.updateStatus('FAILED', stderr)
+            throw new Error('Turtle build error')
+        }
+        console.info('turtle build output')
+        console.info(stdout)
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
         throw err
