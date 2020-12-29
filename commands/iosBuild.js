@@ -18,7 +18,7 @@ async function iosBuild() {
         await writeFile(mobileprovisionFilePath, config.EXPO_IOS_PROVISIONING_PROFILE_BASE64, { encoding: 'base64' })
         const { stdout, stderr } = await execAsync(`turtle build:ios  --team-id ${config.EXPO_APPLE_TEAM_ID} --dist-p12-path ${p12FilePath} --provisioning-profile-path ${mobileprovisionFilePath} -o ${ipaFilePath}`)
         // workaround to check the error from turtle build
-        if (stderr || stdout.includes('ERROR: Failed to build standalone app')) {
+        if (stderr || stdout.includes('Failed to build standalone app')) {
             console.error('turtle build error')
             console.error(stderr)
             await us.updateStatus('FAILED', stderr)
