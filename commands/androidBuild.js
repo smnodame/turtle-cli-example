@@ -26,9 +26,7 @@ async function androidBuild() {
         console.info(stdout)
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxx')
-        console.log(err)
-        process.exit(1)
+        process.exitCode = 1
     }
 }
 

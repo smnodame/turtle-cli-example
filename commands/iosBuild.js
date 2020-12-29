@@ -25,6 +25,6 @@ async function iosBuild() {
 
 if (require.main === module) {
     iosBuild().catch(() => {
-        process.exit(1)
+        process.exitCode = 1
     })
 } 
