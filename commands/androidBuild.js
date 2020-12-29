@@ -16,7 +16,8 @@ async function androidBuild() {
         await us.updateStatus('BUILDING')
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
         const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`)
-        if (stderr) {
+        // workaround to check the error from turtle build
+        if (stderr || stdout.includes('ERROR: Failed to build standalone app')) {
             console.error('turtle build error')
             console.error(stderr)
             await us.updateStatus('FAILED', stderr)
