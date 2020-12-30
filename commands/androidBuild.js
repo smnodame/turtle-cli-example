@@ -17,11 +17,11 @@ async function androidBuild() {
         await us.updateStatus('BUILDING')
         await writeFileAsync(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
         
-        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_ALIAS=${config.EXPO_ANDROID_KEYSTORE_ALIAS}' >> $BASH_ENV`)
-        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ENV_FROM=${config.EXPO_ENV_FROM}' >> $BASH_ENV`)
-        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_PASSWORD=${config.EXPO_ANDROID_KEYSTORE_PASSWORD}' >> $BASH_ENV`)
-        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEY_PASSWORD=${config.EXPO_ANDROID_KEY_PASSWORD}' >> $BASH_ENV`)
-        await appendFileAsync(setENVScriptPath, `source $BASH_ENV`)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_ALIAS=${config.EXPO_ANDROID_KEYSTORE_ALIAS}' >> $BASH_ENV`+ os.EOL)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ENV_FROM=${config.EXPO_ENV_FROM}' >> $BASH_ENV`+ os.EOL)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_PASSWORD=${config.EXPO_ANDROID_KEYSTORE_PASSWORD}' >> $BASH_ENV`+ os.EOL)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEY_PASSWORD=${config.EXPO_ANDROID_KEY_PASSWORD}' >> $BASH_ENV`+ os.EOL)
+        await appendFileAsync(setENVScriptPath, `source $BASH_ENV`+ os.EOL)
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
         process.exitCode = 1
