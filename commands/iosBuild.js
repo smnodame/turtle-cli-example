@@ -18,6 +18,7 @@ async function iosBuild() {
         await writeFile(mobileprovisionFilePath, config.EXPO_IOS_PROVISIONING_PROFILE_BASE64, { encoding: 'base64' })
         const { stdout, stderr } = await execAsync(`turtle build:ios  --team-id ${config.EXPO_APPLE_TEAM_ID} --dist-p12-path ${p12FilePath} --provisioning-profile-path ${mobileprovisionFilePath} -o ${ipaFilePath}`, {
             env: {
+                ...process.env,
                 ...config
             }
         })

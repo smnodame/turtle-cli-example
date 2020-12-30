@@ -14,44 +14,10 @@ async function androidBuild() {
         const jksFilePath = './expo-project.jks'
 
         await us.updateStatus('BUILDING')
-        var { stdout, stderr } = await execAsync(`which yarn`)
-        console.log('======== yarn ========')
-        console.log(stdout)
-        if (stderr) {
-            console.log(stderr)
-        }
-        
-        var { stdout, stderr } = await execAsync(`which npm`)
-        console.log('======= npm =========')
-        console.log(stdout)
-        if (stderr) {
-            console.log(stderr)
-        }
-
-        var { stdout, stderr } = await execAsync(`npm root -g`)
-        console.log('======= -g =========')
-        console.log(stdout)
-        if (stderr) {
-            console.log(stderr)
-        }
-
-        var { stdout, stderr } = await execAsync(`turtle`)
-        console.log('======= turtle =========')
-        console.log(stdout)
-        if (stderr) {
-            console.log(stderr)
-        }
-
-        var { stdout, stderr } = await execAsync(`ls /usr/local/lib/node_modules`)
-        console.log('======= ls =========')
-        console.log(stdout)
-        if (stderr) {
-            console.log(stderr)
-        }
-
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
-        var { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`, {
+        const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`, {
             env: {
+                ...process.env,
                 ...config
             }
         })
