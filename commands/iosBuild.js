@@ -28,14 +28,15 @@ async function iosBuild() {
             console.error(stderr)
             throw new Error(stderr)
         }
+
+        console.info('Turtle build output')
+        console.info(stdout)
+
         // workaround to check the error from turtle build
         if (stdout.includes('Failed to build standalone app')) {
             const errMessage = stdout.split('\n')[1].trim().split(':').splice(1).join('')
             throw new Error(errMessage)
         }
-
-        console.info('Turtle build output')
-        console.info(stdout)
     } catch(err) {
         await us.updateStatus('FAILED', err.message)
         process.exitCode = 1
