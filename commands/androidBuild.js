@@ -29,7 +29,21 @@ async function androidBuild() {
         }
 
         var { stdout, stderr } = await execAsync(`npm root -g`)
+        console.log('======= -g =========')
+        console.log(stdout)
+        if (stderr) {
+            console.log(stderr)
+        }
+
+        var { stdout, stderr } = await execAsync(`turtle`)
         console.log('======= turtle =========')
+        console.log(stdout)
+        if (stderr) {
+            console.log(stderr)
+        }
+
+        var { stdout, stderr } = await execAsync(`ls /usr/local/lib/node_modules`)
+        console.log('======= ls =========')
         console.log(stdout)
         if (stderr) {
             console.log(stderr)
