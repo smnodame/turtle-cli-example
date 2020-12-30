@@ -23,14 +23,14 @@ async function iosBuild() {
             }
         })
 
+        console.info('Turtle build output')
+        console.info(stdout)
+
         if (stderr) {
-            console.error('turtle build error')
+            console.error('Turtle build error')
             console.error(stderr)
             throw new Error(stderr)
         }
-
-        console.info('Turtle build output')
-        console.info(stdout)
 
         // workaround to check the error from turtle build
         if (stdout.includes('Failed to build standalone app')) {
