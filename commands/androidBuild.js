@@ -20,6 +20,10 @@ async function androidBuild() {
                 ...process.env,
                 ...config
             }
+        }).catch((err) => {
+            console.log('xxxxxxxxxxxxxxxxxxx')
+            console.log(err)
+            throw err
         })
         
         console.info('Turtle build output')
