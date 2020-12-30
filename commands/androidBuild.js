@@ -15,6 +15,11 @@ async function androidBuild() {
 
         await us.updateStatus('BUILDING')
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
+        console.log('=========================')
+        console.log({
+            ...process.env,
+            ...config
+        })
         const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`, {
             env: {
                 ...process.env,
