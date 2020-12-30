@@ -2,10 +2,8 @@ const config = require('../config.json')
 const us = require('./updateStatus')
 const util = require('util')
 const fs = require('fs')
-const uf = require('./uploadFile')
-const child_process = require('child_process')
+const os = require('os')
 
-const execAsync = util.promisify(child_process.exec)
 const writeFileAsync = util.promisify(fs.writeFile)
 const appendFileAsync = util.promisify(fs.appendFile)
 
