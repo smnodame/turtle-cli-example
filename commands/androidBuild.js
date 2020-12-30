@@ -15,36 +15,35 @@ async function androidBuild() {
 
         await us.updateStatus('BUILDING')
         await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
-        console.log('=========================')
-        console.log({
-            ...process.env,
-            ...config
-        })
-        const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`, {
-            env: {
-                ...process.env,
-                ...config
-            }
-        }).catch((err) => {
-            console.log('xxxxxxxxxxxxxxxxxxx')
-            console.log(err)
-            throw err
-        })
+        // console.log('=========================')
+        // console.log({
+        //     ...process.env,
+        //     ...config
+        // })
+        // const { stdout, stderr } = await execAsync(`turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`, {
+        //     env: {
+        //         ...process.env,
+        //         ...config
+        //     }
+        // }).catch((err) => {
+        //     console.log(err)
+        //     throw err
+        // })
         
-        console.info('Turtle build output')
-        console.info(stdout)
+        // console.info('Turtle build output')
+        // console.info(stdout)
 
-        if (stderr) {
-            console.error('Turtle build error')
-            console.error(stderr)
-            throw new Error(stderr)
-        }
+        // if (stderr) {
+        //     console.error('Turtle build error')
+        //     console.error(stderr)
+        //     throw new Error(stderr)
+        // }
 
-        // workaround to check the error from turtle build
-        if (stdout.includes('Failed to build standalone app')) {
-            const errMessage = stdout.split('\n')[1].trim().split(':').splice(1).join('')
-            throw new Error(errMessage)
-        }
+        // // workaround to check the error from turtle build
+        // if (stdout.includes('Failed to build standalone app')) {
+        //     const errMessage = stdout.split('\n')[1].trim().split(':').splice(1).join('')
+        //     throw new Error(errMessage)
+        // }
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
         process.exitCode = 1
