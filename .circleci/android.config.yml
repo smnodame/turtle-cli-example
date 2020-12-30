@@ -100,6 +100,12 @@ jobs:
             - run:
                   name: Set bulding
                   command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
+            - run:
+                  name: Publishing Expo app
+                  command: |
+                      expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+                      yarn
+                      expo publish
             - save_yarn_cache:
                   platform: linux
 
@@ -128,8 +134,11 @@ jobs:
             - setup_turtle
             - save_turtle_cache
             - run:
-                  name: Building Expo standalone app
+                  name: Preparing env script
                   command: 'cd ~/expo-project/commands && node ./androidBuild.js'
+            - run:
+                  name: Building Expo standalone app
+                  command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type apk -o ~/expo-project.apk
             - store_artifacts:
                   path: ~/expo-project.apk
             - run:

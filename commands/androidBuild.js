@@ -6,51 +6,22 @@ const uf = require('./uploadFile')
 const child_process = require('child_process')
 
 const execAsync = util.promisify(child_process.exec)
-const writeFile = util.promisify(fs.writeFile)
+const writeFileAsync = util.promisify(fs.writeFile)
+const appendFileAsync = util.promisify(fs.appendFile)
 
 async function androidBuild() {
     try {
-        const apkFilePath = '~/expo-project.apk'
         const jksFilePath = './expo-project.jks'
+        const setENVScriptPath = './expo-project/setEnv.sh'
 
         await us.updateStatus('BUILDING')
-        await writeFile(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
+        await writeFileAsync(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
         
-        console.log('================')
-        console.log({
-            ...process.env,
-            ...config
-        })
-        const { stdout, stderr } = await execAsync([
-            'cd ~/expo-project',
-            'expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive',
-            'yarn',
-            'expo publish',
-            `turtle build:android --keystore-path ${jksFilePath} --keystore-alias ${config.EXPO_ANDROID_KEYSTORE_ALIAS} --type apk -o ${apkFilePath}`
-        ].join(' && '), {
-            env: {
-                ...process.env,
-                ...config
-            }
-        }).catch((err) => {
-            console.error(err)
-            throw err
-        })
-        
-        console.info('Turtle build output')
-        console.info(stdout)
-
-        if (stderr) {
-            console.error('Turtle build error')
-            console.error(stderr)
-            throw new Error(stderr)
-        }
-
-        // workaround to check the error from turtle build
-        if (stdout.includes('Failed to build standalone app')) {
-            const errMessage = stdout.split('\n')[1].trim().split(':').splice(1).join('')
-            throw new Error(errMessage)
-        }
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_ALIAS=${config.EXPO_ANDROID_KEYSTORE_ALIAS}' >> $BASH_ENV`)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ENV_FROM=${config.EXPO_ENV_FROM}' >> $BASH_ENV`)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEYSTORE_PASSWORD=${config.EXPO_ANDROID_KEYSTORE_PASSWORD}' >> $BASH_ENV`)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ANDROID_KEY_PASSWORD=${config.EXPO_ANDROID_KEY_PASSWORD}' >> $BASH_ENV`)
+        await appendFileAsync(setENVScriptPath, `source $BASH_ENV`)
     } catch (err) {
         await us.updateStatus('FAILED', err.message)
         process.exitCode = 1
