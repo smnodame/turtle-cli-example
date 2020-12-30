@@ -11,7 +11,7 @@ const appendFileAsync = util.promisify(fs.appendFile)
 
 async function androidBuild() {
     try {
-        const jksFilePath = '~/expo-project/expo-project.jks'
+        const jksFilePath = '~/expo-project.jks'
         const setENVScriptPath = '~/expo-project/setEnv.sh'
 
         await us.updateStatus('BUILDING')
