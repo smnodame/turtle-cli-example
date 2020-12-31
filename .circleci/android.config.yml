@@ -125,6 +125,9 @@ jobs:
             - run: yarn
             - save_yarn_cache:
                   platform: linux
+            - run: 
+                  name: Remove turtle cache
+                  command: ~/.turtle/workingdir
             - add_yarn_binaries_to_path
             - determine_turtle_cache_key_component
             - restore_turtle_cache
@@ -139,12 +142,6 @@ jobs:
             - run:
                   name: Set mobile config environment
                   command: source setEnv.sh && cat ~/expo-project/setEnv.sh
-            - run:
-                  name: Verify path
-                  command: ls /home/circleci && ls /home/circleci/expo-project
-            - run:
-                  name: xxx
-                  command: export
             - run:
                   name: Building Expo standalone app
                   command: cd ~/expo-project && turtle build:android --keystore-path /home/circleci/expo-project.jks --keystore-alias androiddebugkey --type apk -o ~/expo-project.apk
