@@ -30,6 +30,7 @@ function uploadFile(platform, path) {
         })
         .catch(function (err) {
             us.updateStatus('FAILED', err.message)
+            process.exitCode = 1
         })
 }
 
@@ -40,9 +41,7 @@ module.exports = {
 if (require.main === module) {
     const args = process.argv.slice(2)
     if (args.length >= 2) {
-        uploadFile(args[0], args[1]).catch(() => {
-            process.exitCode = 1
-        })
+        uploadFile(args[0], args[1])
     } else {
         console.log('Status arg is not defined')
     }
