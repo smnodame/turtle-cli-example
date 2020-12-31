@@ -11,9 +11,6 @@ function updateStatus(status, reason='') {
           'Authorization': `Bearer ${config.TOKEN}` 
         }
     })
-    .then(function (response) {
-        console.log(response)
-    })
     .catch(function (error) {
         console.log(error)
     })

@@ -13,18 +13,23 @@ function uploadFile(platform, path) {
     formData.append('file', newFile)
     formData.append('build_id', config.BUILD_ID)
 
-    return axios.post(url, formData, {
+    const request = {
+        method: 'post',
+        url: url,
         headers: {
-        'Authorization': `Bearer ${config.TOKEN}`,
-        'Content-Type': 'multipart/form-data'
+          'Authorization': `Bearer ${config.TOKEN}`,
+          ...formData.getHeaders()
         },
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
-    })
-    .catch(function (err) {
-        us.updateStatus('FAILED', err.message)
-        process.exitCode = 1
-    })
+        data: formData
+    }
+
+    return axios(request)
+        .catch(function (err) {
+            us.updateStatus('FAILED', err.message)
+            process.exitCode = 1
+        })
 }
 
 module.exports = {
