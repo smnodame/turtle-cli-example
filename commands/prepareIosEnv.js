@@ -2,7 +2,7 @@ const config = require('../config.json')
 const us = require('./updateStatus')
 const util = require('util')
 const fs = require('fs')
-const child_process = require('child_process')
+const os = require('os')
 
 const appendFileAsync = util.promisify(fs.appendFile)
 
