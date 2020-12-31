@@ -8,8 +8,7 @@ const readFileAsync = util.promisify(fs.readFile)
 
 async function updateStatus(status, reason, path='') {
     if (path) {
-        const stdout = await readFileAsync(path, 'utf8')
-        reason = stdout.split('\n')[1].trim().split(':').splice(1).join('')
+        reason = await readFileAsync(path, 'utf8')
     }
     
     return axios.post(`${process.env.INVENTORY_ENDPOINT}${process.env.SET_BUILD_STATUS_URL}`, {
