@@ -160,7 +160,8 @@ jobs:
                     --team-id $EXPO_APPLE_TEAM_ID \
                     --dist-p12-path ./expo-project_dist.p12 \
                     --provisioning-profile-path ./expo-project.mobileprovision \
-                    -o ~/expo-project.ipa
+                    -o ~/expo-project.ipa 2>> errors.txt || \
+                    { cd ~/expo-project/commands && node ./updateStatus.js FAILED "" ~/expo-project/errors.txt && exit 1; } 
             - store_artifacts:
                 path: ~/expo-project.ipa
             - run:
