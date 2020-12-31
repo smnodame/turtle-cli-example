@@ -149,8 +149,23 @@ jobs:
             - setup_turtle
             - save_turtle_cache
             - run:
-                  name: Building Expo standalone app
-                  command: 'cd ~/expo-project/commands && node ./iosBuild.js'
+                name: Preparing env script
+                command: 'cd ~/expo-project/commands && node ./prepareIosEnv.js'
+          - run:
+                name: Set mobile config environment
+                command: source setEnv.sh && cat ~/expo-project/setEnv.sh
+          - run:
+                name: Building Expo standalone app
+                command: |
+                    echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
+                    base64 --decode expo-project_dist.p12.base64 > expo-project_dist.p12
+                    echo $EXPO_IOS_PROVISIONING_PROFILE_BASE64 > expo-project.mobileprovision.base64
+                    base64 --decode expo-project.mobileprovision.base64 > expo-project.mobileprovision
+                    turtle build:ios \
+                    --team-id $EXPO_APPLE_TEAM_ID \
+                    --dist-p12-path ./expo-project_dist.p12 \
+                    --provisioning-profile-path ./expo-project.mobileprovision \
+                    -o ~/expo-project.ipa
             - store_artifacts:
                   path: ~/expo-project.ipa
             - run:
