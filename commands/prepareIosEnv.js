@@ -4,8 +4,7 @@ const util = require('util')
 const fs = require('fs')
 const child_process = require('child_process')
 
-const execAsync = util.promisify(child_process.exec)
-const writeFile = util.promisify(fs.writeFile)
+const appendFileAsync = util.promisify(fs.appendFile)
 
 async function iosBuild() {
     try {

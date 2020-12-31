@@ -4,7 +4,6 @@ const util = require('util')
 const fs = require('fs')
 const os = require('os')
 
-const writeFileAsync = util.promisify(fs.writeFile)
 const appendFileAsync = util.promisify(fs.appendFile)
 
 async function androidBuild() {
