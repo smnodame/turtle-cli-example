@@ -23,11 +23,11 @@
       "**/*"
     ],
     "android": {
-      "package": "com.smnodame.turtletest"
+      "package": "com.smnodame.test"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smnodame.turtle-test",
+      "bundleIdentifier": "com.smnodame.test",
       "buildNumber": "13",
       "config": {
         "usesNonExemptEncryption": false
