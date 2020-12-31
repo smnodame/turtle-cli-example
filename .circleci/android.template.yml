@@ -127,7 +127,7 @@ jobs:
                   platform: linux
             - run: 
                   name: Remove turtle cache
-                  command: ~/.turtle/workingdir
+                  command: rm -rf ~/.turtle/workingdir
             - add_yarn_binaries_to_path
             - determine_turtle_cache_key_component
             - restore_turtle_cache
