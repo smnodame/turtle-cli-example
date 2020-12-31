@@ -6,6 +6,10 @@ const us = require('./updateStatus')
 
 function uploadFile(platform, path) {
     const uploadUrl = platform === 'ios' ? process.env.SET_IOS_LINK_URL : process.env.SET_ANDROID_LINK_URL
+    const url = `${process.env.INVENTORY_ENDPOINT}${uploadUrl}`
+
+    console.info(url)
+    console.log(config)
 
     const newFile = fs.createReadStream(path)
     const formData = new FormData()
@@ -14,7 +18,7 @@ function uploadFile(platform, path) {
 
     const request = {
         method: 'post',
-        url: `${process.env.INVENTORY_ENDPOINT}${uploadUrl}`,
+        url: url,
         headers: {
           'Authorization': `Bearer ${config.TOKEN}`,
           'Content-Type': 'multipart/form-data'
@@ -25,9 +29,6 @@ function uploadFile(platform, path) {
     }
 
     return axios(request)
-        .then(function (response) {
-            console.log(response)
-        })
         .catch(function (err) {
             us.updateStatus('FAILED', err.message)
             process.exitCode = 1
