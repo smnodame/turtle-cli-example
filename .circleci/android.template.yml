@@ -135,7 +135,7 @@ jobs:
             - save_turtle_cache
             - run:
                   name: Preparing env script
-                  command: 'cd ~/expo-project/commands && node ./androidBuild.js'
+                  command: 'cd ~/expo-project/commands && node ./prepareAndroidEnv.js'
             - run:
                   name: Set mobile config environment
                   command: source setEnv.sh && cat ~/expo-project/setEnv.sh
@@ -144,7 +144,11 @@ jobs:
                   command: |
                       echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
                       base64 --decode expo-project.jks.base64 > expo-project.jks
-                      turtle build:android --keystore-path /home/circleci/expo-project.jks --keystore-alias androiddebugkey --type apk -o ~/expo-project.apk
+                      turtle build:android \
+                          --keystore-path ./expo-project.jks \
+                          --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+                          --type apk \
+                          -o ~/expo-project.apk
             - store_artifacts:
                   path: ~/expo-project.apk
             - run:

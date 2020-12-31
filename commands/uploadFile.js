@@ -19,6 +19,8 @@ function uploadFile(platform, path) {
           'Authorization': `Bearer ${config.TOKEN}`,
           'Content-Type': 'multipart/form-data'
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
         data: formData
     }
 
