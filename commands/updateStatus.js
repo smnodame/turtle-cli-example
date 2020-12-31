@@ -6,9 +6,9 @@ const os = require('os')
 
 const readFileAsync = util.promisify(fs.readFile)
 
-function updateStatus(status, reason, path='') {
+async function updateStatus(status, reason, path='') {
     if (path) {
-        const stdout = readFileAsync(path, 'utf8')
+        const stdout = await readFileAsync(path, 'utf8')
         // workaround to check the error from turtle build
         if (stdout.includes('Failed to build standalone app')) {
             reason = stdout.split('\n')[1].trim().split(':').splice(1).join('')
