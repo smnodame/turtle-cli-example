@@ -8,7 +8,8 @@ function uploadFile(platform, path) {
     const uploadUrl = platform === 'ios' ? process.env.SET_IOS_LINK_URL : process.env.SET_ANDROID_LINK_URL
     const url = `${process.env.INVENTORY_ENDPOINT}${uploadUrl}`
 
-    console.info(url)
+    console.log(platform)
+    console.log(url)
     console.log(config)
 
     const newFile = fs.createReadStream(path)
