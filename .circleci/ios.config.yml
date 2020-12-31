@@ -169,5 +169,5 @@ jobs:
                     --dist-p12-path ./expo-project_dist.p12 \
                     --provisioning-profile-path ./expo-project.mobileprovision \
                     -o ~/expo-project.ipa
-            - store_artifacts:
-                  path: ~/expo-project.ipa
+          - store_artifacts:
+                path: ~/expo-project.ipa
