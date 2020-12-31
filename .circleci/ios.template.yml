@@ -131,9 +131,6 @@ jobs:
             - run:
                 name: Set completed build
                 command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
-            - run:
-                name: Upload ipa
-                command: 'cd ~/expo-project/commands && node ./uploadFile.js ios ~/expo-project.ipa'
 
     build_ios_archive:
         executor: ios
@@ -171,3 +168,6 @@ jobs:
                     -o ~/expo-project.ipa
             - store_artifacts:
                 path: ~/expo-project.ipa
+                - run:
+                    name: Upload ipa
+                    command: 'cd ~/expo-project/commands && node ./uploadFile.js ios ~/expo-project.ipa'
