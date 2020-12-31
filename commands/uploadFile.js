@@ -8,7 +8,9 @@ function uploadFile(platform, path) {
     const uploadUrl = platform === 'ios' ? process.env.SET_IOS_LINK_URL : process.env.SET_ANDROID_LINK_URL
     const url = `${process.env.INVENTORY_ENDPOINT}${uploadUrl}`
 
+    console.log(process.env)
     console.log(platform)
+    console.log(uploadUrl)
     console.log(url)
     console.log(config)
 
