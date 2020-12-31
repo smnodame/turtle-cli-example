@@ -125,9 +125,6 @@ jobs:
             - run: yarn
             - save_yarn_cache:
                   platform: linux
-            - run: 
-                  name: Remove turtle cache
-                  command: rm -rf ~/.turtle/workingdir
             - add_yarn_binaries_to_path
             - determine_turtle_cache_key_component
             - restore_turtle_cache
@@ -144,7 +141,10 @@ jobs:
                   command: source setEnv.sh && cat ~/expo-project/setEnv.sh
             - run:
                   name: Building Expo standalone app
-                  command: cd ~/expo-project && turtle build:android --keystore-path /home/circleci/expo-project.jks --keystore-alias androiddebugkey --type apk -o ~/expo-project.apk
+                  command: |
+                      echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+                      base64 --decode expo-project.jks.base64 > expo-project.jks
+                      turtle build:android --keystore-path /home/circleci/expo-project.jks --keystore-alias androiddebugkey --type apk -o ~/expo-project.apk
             - store_artifacts:
                   path: ~/expo-project.apk
             - run:
