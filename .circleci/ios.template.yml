@@ -95,9 +95,6 @@ workflows:
             - build_ios_archive:
                 requires:
                     - publish_app
-            - set_completed:
-                requires:
-                    - build_ios_archive
 
 jobs:
     publish_app:
@@ -128,9 +125,7 @@ jobs:
     set_completed:
         executor: js
         steps:
-            - run:
-                name: Set completed build
-                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
+            
 
     build_ios_archive:
         executor: ios
@@ -171,3 +166,6 @@ jobs:
             - run:
                 name: Upload ipa
                 command: 'cd ~/expo-project/commands && node ./uploadFile.js ios ~/expo-project.ipa'
+            - run:
+                name: Set completed build
+                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'

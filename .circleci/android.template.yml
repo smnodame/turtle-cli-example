@@ -79,9 +79,6 @@ workflows:
             - build_android_apk:
                 requires:
                     - publish_app
-            - set_completed:
-                requires:
-                    - build_android_apk
 
 jobs:
     publish_app:
@@ -108,13 +105,6 @@ jobs:
                     expo publish
             - save_yarn_cache:
                 platform: linux
-
-    set_completed:
-        executor: js
-        steps:
-            - run:
-                name: Set completed build
-                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
 
     build_android_apk:
         executor: android
@@ -154,3 +144,6 @@ jobs:
             - run:
                 name: Upload apk
                 command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
+            - run:
+                name: Set completed build
+                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
