@@ -23,34 +23,34 @@ commands:
     add_yarn_binaries_to_path:
         steps:
             - run:
-                  name: Add yarn binaries path to $PATH
-                  command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
+                name: Add yarn binaries path to $PATH
+                command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
 
     determine_turtle_cache_key_component:
         steps:
             - run:
-                  name: Determine Turtle cache key component
-                  command: echo $TURTLE_VERSION $PLATFORM > /tmp/turtle-version-platform
+                name: Determine Turtle cache key component
+                command: echo $TURTLE_VERSION $PLATFORM > /tmp/turtle-version-platform
 
     restore_turtle_cache:
         steps:
             - restore_cache:
-                  keys:
-                      - cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
+                keys:
+                    - cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
 
     save_turtle_cache:
         steps:
             - save_cache:
-                  paths:
-                      - ~/.turtle
-                      - ~/yarn_cache
-                  key: cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
+                paths:
+                    - ~/.turtle
+                    - ~/yarn_cache
+                key: cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
 
     setup_turtle:
         steps:
             - run:
-                  name: Setting up environment for Turtle
-                  command: turtle setup:$PLATFORM --sdk-version $EXPO_SDK_VERSION
+                name: Setting up environment for Turtle
+                command: turtle setup:$PLATFORM --sdk-version $EXPO_SDK_VERSION
 
     restore_yarn_cache:
         parameters:
@@ -58,8 +58,8 @@ commands:
                 type: string
         steps:
             - restore_cache:
-                  keys:
-                      - cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+                keys:
+                    - cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
 
     save_yarn_cache:
         parameters:
@@ -67,9 +67,9 @@ commands:
                 type: string
         steps:
             - save_cache:
-                  paths:
-                      - ~/yarn_cache
-                  key: cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+                paths:
+                    - ~/yarn_cache
+                key: cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
 
 workflows:
     version: 2
@@ -77,11 +77,11 @@ workflows:
         jobs:
             - publish_app
             - build_android_apk:
-                  requires:
-                      - publish_app
+                requires:
+                    - publish_app
             - set_completed:
-                  requires:
-                      - build_android_apk
+                requires:
+                    - build_android_apk
 
 jobs:
     publish_app:
@@ -90,67 +90,67 @@ jobs:
             - checkout
             - add_yarn_binaries_to_path
             - restore_yarn_cache:
-                  platform: linux
+                platform: linux
             - run:
-                  name: Installing expo-cli
-                  command: yarn global add expo-cli
+                name: Installing expo-cli
+                command: yarn global add expo-cli
             - run:
-                  name: Installing cmd packages
-                  command: 'cd ~/expo-project/commands && yarn'
+                name: Installing cmd packages
+                command: 'cd ~/expo-project/commands && yarn'
             - run:
-                  name: Set bulding
-                  command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
+                name: Set bulding
+                command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
             - run:
-                  name: Publishing Expo app
-                  command: |
-                      expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
-                      yarn
-                      expo publish
+                name: Publishing Expo app
+                command: |
+                    expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+                    yarn
+                    expo publish
             - save_yarn_cache:
-                  platform: linux
+                platform: linux
 
     set_completed:
         executor: js
         steps:
-          - run:
-              name: Upload apk
-              command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
-          - run:
-            name: Set completed build
-            command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
+            - run:
+                name: Upload apk
+                command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
+            - run:
+                name: Set completed build
+                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
 
     build_android_apk:
         executor: android
         steps:
             - checkout
             - restore_yarn_cache:
-                  platform: linux
+                platform: linux
             - run: yarn
             - save_yarn_cache:
-                  platform: linux
+                platform: linux
             - add_yarn_binaries_to_path
             - determine_turtle_cache_key_component
             - restore_turtle_cache
             - run:
-                  name: Installing gulp-cli & turtle-cli
-                  command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+                name: Installing gulp-cli & turtle-cli
+                command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
             - setup_turtle
             - save_turtle_cache
             - run:
-                  name: Preparing env script
-                  command: 'cd ~/expo-project/commands && node ./prepareAndroidEnv.js'
+                name: Preparing env script
+                command: 'cd ~/expo-project/commands && node ./prepareAndroidEnv.js'
             - run:
-                  name: Set mobile config environment
-                  command: source setEnv.sh && cat ~/expo-project/setEnv.sh
+                name: Set mobile config environment
+                command: source setEnv.sh && cat ~/expo-project/setEnv.sh
             - run:
-                  name: Building Expo standalone app
-                  command: |
-                      echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
-                      base64 --decode expo-project.jks.base64 > expo-project.jks
-                      turtle build:android \
-                          --keystore-path ./expo-project.jks \
-                          --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
-                          --type apk \
-                          -o ~/expo-project.apk
+                name: Building Expo standalone app
+                command: |
+                    echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+                    base64 --decode expo-project.jks.base64 > expo-project.jks
+                    turtle build:android \
+                        --keystore-path ./expo-project.jks \
+                        --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+                        --type apk \
+                        -o ~/expo-project.apk
             - store_artifacts:
-                  path: ~/expo-project.apk
+                path: ~/expo-project.apk
