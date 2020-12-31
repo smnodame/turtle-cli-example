@@ -112,6 +112,9 @@ jobs:
     set_completed:
         executor: js
         steps:
+          - run:
+                  name: Upload apk
+                  command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
             - run:
                   name: Set completed build
                   command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
@@ -151,6 +154,3 @@ jobs:
                           -o ~/expo-project.apk
             - store_artifacts:
                   path: ~/expo-project.apk
-            - run:
-                  name: Upload apk
-                  command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
