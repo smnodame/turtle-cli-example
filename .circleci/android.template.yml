@@ -115,9 +115,9 @@ jobs:
           - run:
               name: Upload apk
               command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
-            - run:
-              name: Set completed build
-              command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
+          - run:
+            name: Set completed build
+            command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
 
     build_android_apk:
         executor: android
