@@ -138,7 +138,8 @@ jobs:
                         --keystore-path ./expo-project.jks \
                         --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
                         --type apk \
-                        -o ~/expo-project.apk
+                        -o ~/expo-project.apk || \
+                        { cd ~/expo-project/commands && node ./updateStatus.js FAILED "" ~/expo-project/errors.txt && exit 1; } 
             - store_artifacts:
                 path: ~/expo-project.apk
             - run:
