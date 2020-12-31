@@ -9,10 +9,7 @@ const readFileAsync = util.promisify(fs.readFile)
 async function updateStatus(status, reason, path='') {
     if (path) {
         const stdout = await readFileAsync(path, 'utf8')
-        // workaround to check the error from turtle build
-        if (stdout.includes('Failed to build standalone app')) {
-            reason = stdout.split('\n')[1].trim().split(':').splice(1).join('')
-        }
+        reason = stdout.split('\n')[1].trim().split(':').splice(1).join('')
     }
     
     return axios.post(`${process.env.INVENTORY_ENDPOINT}${process.env.SET_BUILD_STATUS_URL}`, {
