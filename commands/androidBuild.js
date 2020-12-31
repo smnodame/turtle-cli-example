@@ -9,8 +9,8 @@ const appendFileAsync = util.promisify(fs.appendFile)
 
 async function androidBuild() {
     try {
-        const jksFilePath = '../expo-project.jks'
-        const setENVScriptPath = '../setEnv.sh'
+        const jksFilePath = '/home/circleci/expo-project.jks'
+        const setENVScriptPath = '/home/circleci/expo-project/setEnv.sh'
 
         await us.updateStatus('BUILDING')
         await writeFileAsync(jksFilePath, config.EXPO_ANDROID_KEYSTORE_BASE64, { encoding: 'base64' })
