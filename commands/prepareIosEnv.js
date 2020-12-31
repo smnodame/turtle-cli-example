@@ -16,7 +16,7 @@ async function iosBuild() {
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_IOS_DIST_P12_BASE64=${config.EXPO_IOS_DIST_P12_BASE64}' >> $BASH_ENV`+ os.EOL)
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_IOS_DIST_P12_PASSWORD=${config.EXPO_IOS_DIST_P12_PASSWORD}' >> $BASH_ENV`+ os.EOL)
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_IOS_PROVISIONING_PROFILE_BASE64=${config.EXPO_IOS_PROVISIONING_PROFILE_BASE64}' >> $BASH_ENV`+ os.EOL)
-        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ENV_FROM=${config.EXPO_ANDROID_KEYSTORE_BASE64}' >> $EXPO_ENV_FROM`+ os.EOL)
+        await appendFileAsync(setENVScriptPath, `echo 'export EXPO_ENV_FROM=${config.EXPO_ENV_FROM}' >> $BASH_ENV`+ os.EOL)
         await appendFileAsync(setENVScriptPath, `source $BASH_ENV`+ os.EOL)
     } catch(err) {
         await us.updateStatus('FAILED', err.message)
