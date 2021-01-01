@@ -10,7 +10,7 @@ async function iosBuild() {
     try {
         await us.updateStatus('BUILDING')
         
-        const setENVScriptPath = '/home/circleci/expo-project/setEnv.sh'
+        const setENVScriptPath = '../setEnv.sh'
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_APPLE_TEAM_ID=${config.EXPO_APPLE_TEAM_ID}' >> $BASH_ENV`+ os.EOL)
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_IOS_DIST_P12_BASE64=${config.EXPO_IOS_DIST_P12_BASE64}' >> $BASH_ENV`+ os.EOL)
         await appendFileAsync(setENVScriptPath, `echo 'export EXPO_IOS_DIST_P12_PASSWORD=${config.EXPO_IOS_DIST_P12_PASSWORD}' >> $BASH_ENV`+ os.EOL)
