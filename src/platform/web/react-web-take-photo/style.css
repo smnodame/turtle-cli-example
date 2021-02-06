@@ -1,0 +1,13 @@
+.camera {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.react-html5-camera-photo {
+    height: 100%;
+}
+
+.camera video {
+    height: 100%;
+}
