@@ -3,7 +3,7 @@ version: 2.1
 executors:
     js:
         docker:
-            - image: circleci/node:12.13.1
+            - image: circleci/node:12.17.0
         working_directory: ~/expo-project
         environment:
             YARN_CACHE_FOLDER: ~/yarn_cache
