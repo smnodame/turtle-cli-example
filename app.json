@@ -1,0 +1,38 @@
+{
+    "expo": {
+      "name": "turtle-cli-example",
+      "slug": "turtle-cli-example",
+      "privacy": "public",
+      "platforms": [
+        "ios",
+        "android",
+        "web"
+      ],
+      "version": "1.0.0",
+      "orientation": "portrait",
+      "icon": "./assets/icon.png",
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      },
+      "updates": {
+        "fallbackToCacheTimeout": 0
+      },
+      "assetBundlePatterns": [
+        "**/*"
+      ],
+      "android": {
+        "package": "com.expo.turtle.cli.example"
+      },
+      "ios": {
+        "supportsTablet": true,
+        "bundleIdentifier": "com.expo.turtle.cli.example",
+        "buildNumber": "13",
+        "config": {
+          "usesNonExemptEncryption": false
+        }
+      }
+    }
+  }
+  
