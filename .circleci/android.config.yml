@@ -99,9 +99,6 @@ jobs:
                 name: Installing cmd packages
                 command: 'cd ~/expo-project/commands && yarn'
             - run:
-                name: Set bulding
-                command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
-            - run:
                 name: Publishing Expo app
                 command: |
                     expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
