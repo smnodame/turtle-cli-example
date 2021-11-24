@@ -6,6 +6,7 @@ const os = require('os')
 
 const appendFileAsync = util.promisify(fs.appendFile)
 
+
 async function iosBuild() {
     try {
         await us.updateStatus('BUILDING')
