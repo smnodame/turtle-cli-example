@@ -11,19 +11,7 @@ async function updateStatus(status, reason, path='') {
         reason = await readFileAsync(path, 'utf8')
     }
     
-    return axios.post(`${process.env.INVENTORY_ENDPOINT}${process.env.SET_BUILD_STATUS_URL}`, {
-        build_id: config.BUILD_ID,
-        status: status,
-        reason: reason
-    }, {
-        headers: {
-          'Authorization': `Bearer ${config.TOKEN}` 
-        }
-    })
-    .catch(function (error) {
-        process.exitCode = 1
-        console.log(error)
-    })
+    return 1
 }
 
 module.exports = {
