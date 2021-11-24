@@ -99,9 +99,6 @@ jobs:
                 name: Installing cmd packages
                 command: 'cd ~/expo-project/commands && yarn'
             - run:
-                name: Set bulding
-                command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
-            - run:
                 name: Publishing Expo app
                 command: |
                     expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
@@ -142,13 +139,6 @@ jobs:
                         --keystore-path ./expo-project.jks \
                         --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
                         --type apk \
-                        -o ~/expo-project.apk 2>> errors.txt || \
-                        { cd ~/expo-project/commands && node ./updateStatus.js FAILED "" ~/expo-project/errors.txt && exit 1; } 
+                        -o ~/expo-project.apk
             - store_artifacts:
                 path: ~/expo-project.apk
-            - run:
-                name: Upload apk
-                command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
-            - run:
-                name: Set completed build
-                command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
