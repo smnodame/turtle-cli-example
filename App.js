@@ -1,3 +1,5 @@
-import HybridApp from './src/app'
+import { View } from 'react-native'
 
-export default HybridApp
+export default () => {
+    return <View></View>
+}
