@@ -126,7 +126,7 @@ jobs:
             - save_turtle_cache
             - run:
                 name: Set mobile config environment
-                command: source setEnv.sh
+                command: source ~/expo-project/commands/setEnv.sh
             - run:
                 name: Building Expo standalone app
                 command: |
