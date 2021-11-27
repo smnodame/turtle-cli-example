@@ -1,8 +1,8 @@
 {
     "expo": {
-      "name": "expo-app",
-      "slug": "expo-app",
-      "version": "1.0.0",
+      "name": "test",
+      "slug": "test",
+      "version": "1.0.8",
       "orientation": "portrait",
       "icon": "./assets/icon.png",
       "splash": {
@@ -17,7 +17,7 @@
         "**/*"
       ],
       "ios": {
-          "bundleIdentifier": "com.yourcompany.yourappname",
+          "bundleIdentifier": "com.example.myapplication",
           "buildNumber": "1.0.0"
       },
       "android": {
@@ -25,8 +25,8 @@
           "foregroundImage": "./assets/adaptive-icon.png",
           "backgroundColor": "#FFFFFF"
         },
-          "package": "com.yourcompany.yourappname",
-          "versionCode": 1
+          "package": "com.example.myapplication",
+          "versionCode": 2
       },
       "web": {
         "favicon": "./assets/favicon.png"
