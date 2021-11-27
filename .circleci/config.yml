@@ -137,7 +137,7 @@ jobs:
                     base64 --decode expo-project.jks.base64 > expo-project.jks
                     turtle build:android \
                         --keystore-path ./expo-project.jks \
-                        --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+                        --keystore-alias xvlbzgbaicmr \
                         --type apk \
                         -o ~/expo-project.apk
             - store_artifacts:
