@@ -17,7 +17,7 @@ executors:
             - image: dsokal/expo-turtle-android
         working_directory: ~/expo-project
         environment:
-            EXPO_SDK_VERSION: 37.0.0
+            EXPO_SDK_VERSION: 43.0.2
             TURTLE_VERSION: 0.23.5
             PLATFORM: android
             YARN_CACHE_FOLDER: ~/yarn_cache
