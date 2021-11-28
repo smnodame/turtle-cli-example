@@ -111,19 +111,11 @@ jobs:
         executor: android
         steps:
             - checkout
-            - restore_yarn_cache:
-                platform: linux
             - run: yarn
-            - save_yarn_cache:
-                platform: linux
-            - add_yarn_binaries_to_path
-            - determine_turtle_cache_key_component
-            - restore_turtle_cache
             - run:
                 name: Installing gulp-cli & turtle-cli
                 command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
             - setup_turtle
-            - save_turtle_cache
             - run:
                 name: Set mobile config environment
                 command: source ~/expo-project/commands/setEnv.sh
