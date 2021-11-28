@@ -89,6 +89,7 @@ jobs:
         resource_class: medium+
         steps:
             - checkout
+            - add_yarn_binaries_to_path
             - run:
                 name: Installing expo-cli
                 command: yarn global add expo-cli
