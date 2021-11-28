@@ -115,7 +115,7 @@ jobs:
             - add_yarn_binaries_to_path
             - run:
                 name: Installing gulp-cli & turtle-cli
-                command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+                command: yarn global add gulp-cli turtle-cli@0.23.5
             - setup_turtle
             - run:
                 name: Set mobile config environment
