@@ -89,9 +89,6 @@ jobs:
         resource_class: medium+
         steps:
             - checkout
-            - add_yarn_binaries_to_path
-            - restore_yarn_cache:
-                platform: linux
             - run:
                 name: Installing expo-cli
                 command: yarn global add expo-cli
@@ -112,6 +109,9 @@ jobs:
         steps:
             - checkout
             - run: yarn
+            - save_yarn_cache:
+                platform: linux
+            - add_yarn_binaries_to_path
             - run:
                 name: Installing gulp-cli & turtle-cli
                 command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
