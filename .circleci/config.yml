@@ -14,7 +14,7 @@ executors:
         # More Information Here - https://circleci.com/docs/2.0/configuration-reference/#resource_class
         resource_class: xlarge
         docker:
-            - image: circleci/node:16.13.0
+            - image: circleci/node:12.13.1
         working_directory: ~/expo-project
         environment:
             EXPO_SDK_VERSION: 43.0.2
@@ -109,8 +109,6 @@ jobs:
         executor: android
         steps:
             - checkout
-            - run: sudo apt-get install software-properties-common
-            - run: sudo add-apt-repository ppa:openjdk-r/ppa
             - run: sudo apt-get update -y
             - run: sudo apt-get install openjdk-8-jdk rsync -y
             - run: yarn
