@@ -18,7 +18,7 @@ executors:
         working_directory: ~/expo-project
         environment:
             EXPO_SDK_VERSION: 37.0.0
-            TURTLE_VERSION: 0.23.5
+            TURTLE_VERSION: 0.24.2
             PLATFORM: android
             YARN_CACHE_FOLDER: ~/yarn_cache
 
