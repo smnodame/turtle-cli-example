@@ -1,0 +1,7 @@
+version: '3.3'
+services:
+    expo:
+        container_name: expo
+        build: .
+        volumes:
+            - '.:/src'
