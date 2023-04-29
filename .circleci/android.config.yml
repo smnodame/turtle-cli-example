@@ -1,0 +1,115 @@
+version: 2.1
+
+executors:
+    js:
+        docker:
+            - image: cimg/node:latest
+        working_directory: ~/expo-project
+        environment:
+            YARN_CACHE_FOLDER: ~/yarn_cache
+
+    android:
+        # WARNING: medium (default) seems not to be enough for Turtle
+        # To use larger resource classes you need to open a ticket and request it from CircleCI
+        # More Information Here - https://circleci.com/docs/2.0/configuration-reference/#resource_class
+        docker:
+            - image: cimg/node:latest
+        working_directory: ~/expo-project
+        environment:
+            PLATFORM: android
+            YARN_CACHE_FOLDER: ~/yarn_cache
+
+commands:
+    add_yarn_binaries_to_path:
+        steps:
+            - run:
+                name: Add yarn binaries path to $PATH
+                command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
+
+    restore_yarn_cache:
+        parameters:
+            platform:
+                type: string
+        steps:
+            - restore_cache:
+                keys:
+                    - cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+
+    save_yarn_cache:
+        parameters:
+            platform:
+                type: string
+        steps:
+            - save_cache:
+                paths:
+                    - ~/yarn_cache
+                key: cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+
+workflows:
+    version: 2
+    builds:
+        jobs:
+            - publish_app
+            - build_android_apk:
+                requires:
+                    - publish_app
+
+jobs:
+    publish_app:
+        executor: js
+        resource_class: medium+
+        steps:
+            - checkout
+            - add_yarn_binaries_to_path
+            - restore_yarn_cache:
+                platform: linux
+            - run:
+                name: Installing cmd packages
+                command: 'cd ~/expo-project/commands && yarn'
+            - run:
+                name: Set bulding
+                command: 'cd ~/expo-project/commands && node ./updateStatus.js BUILDING'
+            - save_yarn_cache:
+                platform: linux
+
+    build_android_apk:
+        executor: android
+        steps:
+            - run: sudo apt-get update -y
+            - run: sudo apt-get install openjdk-11-jdk rsync -y
+            - checkout
+            - restore_yarn_cache:
+                platform: linux
+            - run: yarn
+            - save_yarn_cache:
+                platform: linux
+            - add_yarn_binaries_to_path
+            - run:
+                name: Installing eas-cli
+                command: yarn global add eas-cli
+            - run: eas build --platform android --local
+            # - run:
+            #     name: Preparing env script
+            #     command: 'cd ~/expo-project/commands && node ./prepareAndroidEnv.js'
+            # - run:
+            #     name: Set mobile config environment
+            #     command: source setEnv.sh && cat ~/expo-project/setEnv.sh
+            # - run:
+            #     name: Building Expo standalone app
+            #     command: |
+            #         echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+            #         base64 --decode expo-project.jks.base64 > expo-project.jks
+            #         turtle build:android \
+            #             --keystore-path ./expo-project.jks \
+            #             --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+            #             --type apk \
+            #             -o ~/expo-project.apk 2>> errors.txt || \
+            #             { cd ~/expo-project/commands && node ./updateStatus.js FAILED "" ~/expo-project/errors.txt && exit 1; } 
+            # - store_artifacts:
+            #     path: ~/expo-project.apk
+            # - run:
+            #     name: Upload apk
+            #     command: 'cd ~/expo-project/commands && node ./uploadFile.js android ~/expo-project.apk'
+            # - run:
+            #     name: Set completed build
+            #     command: 'cd ~/expo-project/commands && node ./updateStatus.js COMPLETED'
