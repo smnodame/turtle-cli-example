@@ -1,0 +1,56 @@
+FROM node:16-alpine as builder
+
+ENV NODE_ENV=production
+
+ARG REACT_APP_PROTOCAL
+ARG REACT_APP_DOMAIN
+ARG REACT_APP_API_BASE_URL
+ARG REACT_APP_VERSION
+
+ARG REACT_APP_NAME
+ARG REACT_APP_SLUG
+ARG REACT_APP_IOS_BUNDLE_IDENTIFIER
+ARG REACT_APP_ANDROID_PACKAGE
+ARG REACT_APP_TOKEN
+ARG REACT_APP_SPLASH_COLOR
+
+ENV REACT_APP_PROTOCAL=${REACT_APP_PROTOCAL}
+ENV REACT_APP_DOMAIN=${REACT_APP_DOMAIN}
+ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+ENV REACT_APP_VERSION=${REACT_APP_VERSION}
+
+ENV REACT_APP_NAME=${REACT_APP_NAME}
+ENV REACT_APP_SLUG=${REACT_APP_SLUG}
+ENV REACT_APP_IOS_BUNDLE_IDENTIFIER=${REACT_APP_IOS_BUNDLE_IDENTIFIER}
+ENV REACT_APP_ANDROID_PACKAGE=${REACT_APP_ANDROID_PACKAGE}
+ENV REACT_APP_TOKEN=${REACT_APP_TOKEN}
+ENV REACT_APP_SPLASH_COLOR=${REACT_APP_SPLASH_COLOR}
+
+RUN apk update \
+  && apk upgrade \
+  && apk add --no-cache \
+  make python3 git
+ 
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+COPY . /app
+
+RUN npm run build
+
+FROM nginx:alpine
+
+RUN apk update \
+  && apk upgrade
+  
+RUN rm -rf  /usr/share/nginx/html/*
+COPY --from=builder /app/build /usr/share/nginx/html
+
+RUN rm -rf /etc/nginx/conf.d/*
+COPY --from=builder /app/nginx.conf /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]
+
+EXPOSE 80
